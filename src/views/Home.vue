@@ -32,7 +32,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
                     <el-menu-item index="0">LOGO</el-menu-item>
                     <div class="flex-grow"/>
                     <el-dropdown>
-                        <div class="el-dropdown-link" style="margin-right: 25px;margin-top: 14px">
+                        <div class="el-dropdown-link" style="margin-right: 25px;margin-top: 14px;margin-bottom: 13px;">
                             <el-avatar :size="30" :src="circleUrl" />
                         </div>
                         <template #dropdown>
