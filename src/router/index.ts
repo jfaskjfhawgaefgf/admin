@@ -8,7 +8,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
-    // redirect:'/video',
+    redirect:'/video',
     children:[
       {
         path: '/video',

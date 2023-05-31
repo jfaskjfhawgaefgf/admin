@@ -6,13 +6,14 @@ import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
     isShow: Boolean,
-    info: Video
+    info: Video,
+    apikey: String
 })
-// const emits = defineEmits(["closeAdd"])
+const apikey = computed(() => props.apikey)
 const dialogTableVisible = computed(() => props.isShow)
 watch(() => props.info, async (newInfo) => {
-    if (newInfo) {
-        data.value = await getVideo(await checkPwd("admin123"), newInfo.uid)
+    if (newInfo && apikey.value) {
+        data.value = await getVideo(apikey.value, newInfo.uid)
     }
 })
 const data = ref<Video>(new Video())

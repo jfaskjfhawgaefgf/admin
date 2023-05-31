@@ -5,12 +5,14 @@ import Video from '@/class/Video';
 import User from '@/class/User';
 import { getUser, getUserList, editVideo, addVideo } from '@/axios/post';
 import { checkPwd } from "@/axios/get";
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 const props = defineProps({
     isShow: Boolean,
-    info: Video
+    info: Video,
+    apikey: String
 })
+const apikey = computed(() => props.apikey)
 const drawer2 = computed(() => props.isShow)
 const direction = ref('rtl')
 function cancelClick() {
@@ -26,8 +28,17 @@ const form = ref({
 })
 const isEdit = ref(false)
 
-
+watch(() => props.apikey, async () => {
+    try {
+        if (apikey.value) {
+            options.value = await getUserList(apikey.value)
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
 watch(() => props.info, (newInfo) => {
+
     if (newInfo) {
         form.value = {
             uid: newInfo.uid,
@@ -38,12 +49,19 @@ watch(() => props.info, (newInfo) => {
         }
         try {
             newInfo.user.forEach(async (element: { uid: number; works: any; }) => {
-                TableData.value.push(
-                    {
-                        uid: element.uid,
-                        uname: (await getUser((await checkPwd("admin123")), element.uid)).uname,
-                        works: element.works
-                    })
+                if (apikey.value) {
+                    try {
+                        TableData.value.push(
+                            {
+                                uid: element.uid,
+                                uname: (await getUser(apikey.value, element.uid)).uname,
+                                works: element.works
+                            })
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+
             })
         } catch (error) {
             console.log(error);
@@ -53,65 +71,74 @@ watch(() => props.info, (newInfo) => {
         isEdit.value = false
     }
 })
-
-
 const value = ref()
 const works = ref('')
 const options = ref([new User()])
-fetchData()
-async function fetchData() {
-    try {
-        options.value = await getUserList(await checkPwd("admin123"))
-    } catch (error) {
-        console.log(error);
-    }
-}
-fetchData()
 async function confirmClick() {
-    let isOK = ref(false)
-    TableData.value.forEach((element) => {
-        user.value.push({
-            uid: element.uid,
-            works: element.works
-        })
-    })
-    if (isEdit.value) {
-        try {
-            isOK.value = await editVideo(await checkPwd("admin123"), form.value.uid, {
-                title: form.value.title,
-                info: form.value.info,
-                src: form.value.src,
-                img: form.value.img,
-                user: user.value
-            })
-        } catch (error) {
-            console.log(error);
+    ElMessageBox.confirm(
+        '确定提交?',
+        'Warning',
+        {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
         }
-    } else {
-        try {
-            isOK.value = await addVideo(await checkPwd("admin123"), true,{
-                title: form.value.title,
-                info: form.value.info,
-                src: form.value.src,
-                img: form.value.img,
-                user: user.value
+    )
+        .then(async () => {
+            let isOK = ref(false)
+            TableData.value.forEach((element) => {
+                user.value.push({
+                    uid: element.uid,
+                    works: element.works
+                })
             })
-            
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    user.value = []
-    if (isOK.value) {
-        ElMessage({
-            message: '成功',
-            type: 'success',
+            if (isEdit.value) {
+                try {
+                    if (apikey.value) {
+                        isOK.value = await editVideo(apikey.value, form.value.uid, {
+                            title: form.value.title,
+                            info: form.value.info,
+                            src: form.value.src,
+                            img: form.value.img,
+                            user: user.value
+                        })
+                    }
+
+                } catch (error) {
+                    console.log(error);
+                }
+            } else {
+                try {
+                    if (apikey.value) {
+                        isOK.value = await addVideo(apikey.value, true, {
+                            title: form.value.title,
+                            info: form.value.info,
+                            src: form.value.src,
+                            img: form.value.img,
+                            user: user.value
+                        })
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            user.value = []
+            if (isOK.value) {
+                ElMessage({
+                    message: '成功',
+                    type: 'success',
+                })
+                emits("succes")
+                clear()
+            } else {
+                ElMessage.error('失败')
+            }
         })
-        emits("succes")
-        clear()
-    } else {
-        ElMessage.error('失败')
-    }
+        .catch(() => {
+        })
+
 }
 interface workuser {
     uid: number,
@@ -133,12 +160,15 @@ const handleDelete = (index: number, row: worksUser) => {
 
 async function addUser() {
     try {
-        TableData.value.push(
-            {
-                uid: value.value,
-                uname: (await getUser((await checkPwd("admin123")), value.value)).uname,
-                works: works.value
-            })
+        if (apikey.value) {
+            TableData.value.push(
+                {
+                    uid: value.value,
+                    uname: (await getUser((apikey.value), value.value)).uname,
+                    works: works.value
+                })
+        }
+
     } catch (error) {
         console.log(error);
     }

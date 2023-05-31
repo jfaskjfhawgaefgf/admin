@@ -1,30 +1,58 @@
 <script setup lang="ts">
 
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { getUserList, delUser } from '@/axios/post'
 import { checkPwd } from "@/axios/get";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import User from "@/class/User";
 import UserDrawer from '@/components/UserDrawer.vue'
+import getCookie from "@/cookie/getcookie";
 
+const apikey = ref("")
+async function getapikey() {
+    let key = getCookie("apikey")
+    if (key === null || await getUserList(key) === undefined) {
+        document.cookie = "apikey=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        location.replace("/#/Login")
+    } else {
+        apikey.value = key
+    }
+}
+console.log(apikey.value);
 const handleEdit = (index: number, row: User) => {
     isShow.value = true
     info.value = row
 }
 const handleDelete = async (index: number, row: User) => {
-    try {
-        if (await delUser(await checkPwd("admin123"), row.uid)) {
-            ElMessage({
-                message: '成功',
-                type: 'success'
-            })
-            fetchData()
-        } else {
-            ElMessage.error('失败')
+    ElMessageBox.confirm(
+        '确定删除?',
+        'Warning',
+        {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
         }
-    } catch (error) {
-        console.log(error);
-    }
+    )
+        .then(async () => {
+            try {
+
+                if (await delUser(apikey.value, row.uid)) {
+
+                    ElMessage({
+                        message: '成功',
+                        type: 'success'
+                    })
+                    fetchData()
+                } else {
+                    ElMessage.error('失败')
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        })
+        .catch(() => {
+        })
+
 }
 const addUser = () => {
     isShow.value = true
@@ -40,7 +68,8 @@ const parentBorder = ref(true)
 fetchData()
 async function fetchData() {
     try {
-        tableData.value = await getUserList(await checkPwd("admin123"))
+        await getapikey()
+        tableData.value = await getUserList(apikey.value)
     } catch (error) {
         console.log(error);
     }
@@ -78,7 +107,7 @@ const succes = () => {
             </el-table-column>
         </el-table>
     </div>
-    <UserDrawer :isShow="isShow" :info="info" @succes="succes" @closeAdd="closeAdd"></UserDrawer>
+    <UserDrawer :isShow="isShow" :info="info" @succes="succes" @closeAdd="closeAdd" :apikey="apikey"></UserDrawer>
 </template>
 <style lang="less">
 * {

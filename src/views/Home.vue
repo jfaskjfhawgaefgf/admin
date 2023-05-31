@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import {
     SwitchButton,
     Menu as IconMenu,
     Histogram
 } from '@element-plus/icons-vue'
 import { reactive, toRefs } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus';
 const state = reactive({
     circleUrl:
         'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
@@ -15,29 +16,43 @@ const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
 }
+const exitLogin = () => {
+    ElMessageBox.confirm(
+        '确定退出登录?',
+        'Warning',
+        {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            document.cookie = "apikey=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+            location.replace("/#/Login")
+            ElMessage({
+                message: '退出登录！',
+                type: 'warning',
+            })
+        })
+        .catch(() => {
+        })
+}
 </script>
 <template>
     <div class="common-layout">
         <el-container>
             <el-header>
-                <el-menu
-                        :default-active="activeIndex"
-                        :ellipsis="false"
-                        class="el-menu-demo"
-                        mode="horizontal"
-                        style="position: fixed;width: 96%;"
-
-                        @select="handleSelect"
-                >
+                <el-menu :default-active="activeIndex" :ellipsis="false" class="el-menu-demo" mode="horizontal"
+                    style="position: fixed;width: 96%;" @select="handleSelect">
                     <el-menu-item index="0">LOGO</el-menu-item>
-                    <div class="flex-grow"/>
+                    <div class="flex-grow" />
                     <el-dropdown>
                         <div class="el-dropdown-link" style="margin-right: 25px;margin-top: 14px;margin-bottom: 13px;">
                             <el-avatar :size="30" :src="circleUrl" />
                         </div>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item :icon="SwitchButton">退出登录</el-dropdown-item>
+                                <el-dropdown-item :icon="SwitchButton" @click="exitLogin">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -55,7 +70,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
                                 <el-sub-menu index="1" :default-openeds="['1-1']">
                                     <template #title>
                                         <el-icon>
-                                            <el-icon><Histogram /></el-icon>
+                                            <el-icon>
+                                                <Histogram />
+                                            </el-icon>
                                         </el-icon>
                                         <span>仪表盘</span>
                                     </template>
@@ -64,7 +81,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
                                 <el-sub-menu index="2">
                                     <template #title>
                                         <el-icon>
-                                            <icon-menu/>
+                                            <icon-menu />
                                         </el-icon>
                                         <span>管理界面</span>
                                     </template>
@@ -90,33 +107,37 @@ const handleSelect = (key: string, keyPath: string[]) => {
 <style lang="less">
 //侧边栏菜单
 .layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
+    color: var(--el-text-color-primary);
+    background: var(--el-color-primary-light-8);
 }
 
 .layout-container-demo .el-menu {
-  border-right: none;
+    border-right: none;
 }
 
 * {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .flex-grow {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
-html, body, #app, .common-layout, section, .el-scrollbar__view {
-  height: 100%;
+html,
+body,
+#app,
+.common-layout,
+section,
+.el-scrollbar__view {
+    height: 100%;
 }
 
 
 .block-col-2 .demonstration {
-  display: block;
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin-bottom: 20px;
+    display: block;
+    color: var(--el-text-color-secondary);
+    font-size: 14px;
+    margin-bottom: 20px;
 }
-
 </style>

@@ -2,12 +2,22 @@
 
 import { ref } from "vue";
 import VideoDrawer from "@/components/VideoDrawer.vue";
-import { getVideoList, delVideo } from '@/axios/post'
-import { checkPwd } from "@/axios/get";
+import { getVideoList, delVideo, getUserList } from '@/axios/post'
 import Video from "@/class/Video";
 import VideoShow from '@/components/VideoShow.vue'
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
+import getCookie from "@/cookie/getcookie";
 
+const apikey = ref("")
+async function getapikey() {
+    let key = getCookie("apikey")
+    if (key === null || await getUserList(key) === undefined) {
+        document.cookie = "apikey=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        location.replace("/#/Login")
+    } else {
+        apikey.value = key
+    }
+}
 const handleEdit = (index: number, row: Video) => {
     isShow.value = true
     info.value = row
@@ -17,19 +27,33 @@ const handleShow = (index: number, row: Video) => {
     info1.value = row
 }
 const handleDelete = async (index: number, row: Video) => {
-    try {
-        if (await delVideo(await checkPwd("admin123"), row.uid)) {
-            ElMessage({
-                message: '成功',
-                type: 'success'
-            })
-            fetchData()
-        } else {
-            ElMessage.error('失败')
+    ElMessageBox.confirm(
+        '确定删除?',
+        'Warning',
+        {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
         }
-    } catch (error) {
-        console.log(error);
-    }
+    )
+        .then(async () => {
+            try {
+                if (await delVideo(apikey.value, row.uid)) {
+                    ElMessage({
+                        message: '成功',
+                        type: 'success'
+                    })
+                    fetchData()
+                } else {
+                    ElMessage.error('失败')
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        })
+        .catch(() => {
+        })
+
 }
 const addVideo = () => {
     isShow.value = true
@@ -47,7 +71,8 @@ const childBorder = ref(true)
 fetchData()
 async function fetchData() {
     try {
-        tableData.value = await getVideoList(await checkPwd("admin123"))
+        await getapikey()
+        tableData.value = await getVideoList(apikey.value)
     } catch (error) {
         console.log(error);
     }
@@ -90,8 +115,8 @@ const closeAdd1 = () => {
             </el-table-column>
         </el-table>
     </div>
-    <VideoDrawer :isShow="isShow" :info="info" @succes="succes" @closeAdd="closeAdd"></VideoDrawer>
-    <VideoShow :isShow="isShow1" :info="info1" @closeAdd="closeAdd1"></VideoShow>
+    <VideoDrawer :isShow="isShow" :info="info" :apikey="apikey" @succes="succes" @closeAdd="closeAdd"></VideoDrawer>
+    <VideoShow :isShow="isShow1" :info="info1" :apikey="apikey" @closeAdd="closeAdd1"></VideoShow>
 </template>
 
 <style lang="less">

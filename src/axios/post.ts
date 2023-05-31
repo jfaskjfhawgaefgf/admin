@@ -1,9 +1,10 @@
 import axios from "axios";
-import { fa, tr } from "element-plus/es/locale";
+
+const apiurl = process.env.VUE_APP_API_URL
 export async function getVideoList(key: string): Promise<any> {
   let data;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/getVideoList", {
+    .post(apiurl+"/admin/getVideoList", {
       key: key,
     })
     .then(function (response) {
@@ -19,7 +20,7 @@ export async function getVideoList(key: string): Promise<any> {
 export async function getUser(key: string, uid: number): Promise<any> {
   let data;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/getUser", {
+    .post(apiurl+"/admin/getUser", {
       key: key,
       uid: uid,
     })
@@ -36,7 +37,7 @@ export async function getUser(key: string, uid: number): Promise<any> {
 export async function getVideo(key: string, uid: number): Promise<any> {
   let data;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/getVideo", {
+    .post(apiurl+"/admin/getVideo", {
       key: key,
       uid: uid,
     })
@@ -53,7 +54,7 @@ export async function getVideo(key: string, uid: number): Promise<any> {
 export async function getUserList(key: string): Promise<any> {
   let data;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/getUserList", {
+    .post(apiurl+"/admin/getUserList", {
       key: key,
     })
     .then(function (response) {
@@ -73,7 +74,7 @@ export async function addVideo(
 ): Promise<boolean> {
   let data: boolean = false;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/addVideo", {
+    .post(apiurl+"/admin/addVideo", {
       key: key,
       before: before,
       data: vdata,
@@ -95,7 +96,7 @@ export async function editVideo(
 ): Promise<boolean> {
   let data: boolean = false;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/editVideo", {
+    .post(apiurl+"/admin/editVideo", {
       key: key,
       uid: uid,
       data: vdata,
@@ -113,7 +114,7 @@ export async function editVideo(
 export async function delVideo(key: string, uid: number): Promise<boolean> {
   let data: boolean = false;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/delVideo", {
+    .post(apiurl+"/admin/delVideo", {
       key: key,
       uid: uid,
     })
@@ -130,7 +131,7 @@ export async function delVideo(key: string, uid: number): Promise<boolean> {
 export async function addUser(key: string, udata: any): Promise<boolean> {
   let data: boolean = false;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/addUser", {
+    .post(apiurl+"/admin/addUser", {
       key: key,
       data: udata,
     })
@@ -151,7 +152,7 @@ export async function editUser(
 ): Promise<boolean> {
   let data: boolean = false;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/editUser", {
+    .post(apiurl+"/admin/editUser", {
       key: key,
       uid: uid,
       data: udata,
@@ -169,7 +170,7 @@ export async function editUser(
 export async function delUser(key: string, uid: number): Promise<boolean> {
   let data: boolean = false;
   await axios
-    .post("http://127.0.0.1:10086/api/admin/delUser", {
+    .post(apiurl+"/admin/delUser", {
       key: key,
       uid: uid,
     })
