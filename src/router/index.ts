@@ -5,7 +5,7 @@ import Login from '@/views/Login.vue'
 import User from '@/views/User.vue'
 const routes = [
   {
-    path: '/',
+    path: '/admin',
     name: 'home',
     component: Home,
     redirect:'/video',
