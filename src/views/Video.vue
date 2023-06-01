@@ -13,7 +13,7 @@ async function getapikey() {
     let key = getCookie("apikey")
     if (key === null || await getUserList(key) === undefined) {
         document.cookie = "apikey=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-        location.replace("./Login")
+        location.replace("./#/Login")
     } else {
         apikey.value = key
     }
