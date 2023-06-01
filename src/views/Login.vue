@@ -16,7 +16,7 @@ const submit = async () => {
             message: '登录成功！',
             type: 'success',
         })
-        location.replace("/")
+        location.replace("./")
     }
 
 }

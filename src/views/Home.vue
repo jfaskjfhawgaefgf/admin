@@ -28,7 +28,7 @@ const exitLogin = () => {
     )
         .then(() => {
             document.cookie = "apikey=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-            location.replace("/#/Login")
+            location.replace("./Login")
             ElMessage({
                 message: '退出登录！',
                 type: 'warning',
@@ -85,10 +85,10 @@ const exitLogin = () => {
                                         </el-icon>
                                         <span>管理界面</span>
                                     </template>
-                                    <router-link to="/Video" style="text-decoration: none">
+                                    <router-link to="./Video" style="text-decoration: none">
                                         <el-menu-item index="2-1">视频管理</el-menu-item>
                                     </router-link>
-                                    <router-link to="/User" style="text-decoration: none">
+                                    <router-link to="./User" style="text-decoration: none">
                                         <el-menu-item index="2-2">用户管理</el-menu-item>
                                     </router-link>
                                 </el-sub-menu>

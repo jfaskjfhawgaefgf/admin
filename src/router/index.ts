@@ -5,23 +5,23 @@ import Login from '@/views/Login.vue'
 import User from '@/views/User.vue'
 const routes = [
   {
-    path: '/admin',
+    path: './',
     name: 'home',
     component: Home,
-    redirect:'/video',
+    redirect:'./video',
     children:[
       {
-        path: '/video',
+        path: './video',
         component:Video
       },
       {
-        path: '/User',
+        path: './User',
         component:User
       }
     ]
   },
   {
-    path: '/login',
+    path: './login',
     name: 'login',
     component: Login,
   }
