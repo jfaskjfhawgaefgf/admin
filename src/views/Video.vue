@@ -8,6 +8,7 @@ import VideoShow from '@/components/VideoShow.vue'
 import { ElMessage, ElMessageBox } from "element-plus";
 import getCookie from "@/cookie/getcookie";
 
+const isEdit = ref(false)
 const apikey = ref("")
 async function getapikey() {
     let key = getCookie("apikey")
@@ -20,6 +21,7 @@ async function getapikey() {
 }
 const handleEdit = (index: number, row: Video) => {
     isShow.value = true
+    isEdit.value = true
     info.value = row
 }
 const handleShow = (index: number, row: Video) => {
@@ -56,6 +58,7 @@ const handleDelete = async (index: number, row: Video) => {
 
 }
 const addVideo = () => {
+    isEdit.value = false
     isShow.value = true
 }
 const tableData = ref(null)
@@ -115,7 +118,7 @@ const closeAdd1 = () => {
             </el-table-column>
         </el-table>
     </div>
-    <VideoDrawer :isShow="isShow" :info="info" :apikey="apikey" @succes="succes" @closeAdd="closeAdd"></VideoDrawer>
+    <VideoDrawer :isShow="isShow" :isEdit="isEdit" :info="info" :apikey="apikey" @succes="succes" @closeAdd="closeAdd"></VideoDrawer>
     <VideoShow :isShow="isShow1" :info="info1" :apikey="apikey" @closeAdd="closeAdd1"></VideoShow>
 </template>
 

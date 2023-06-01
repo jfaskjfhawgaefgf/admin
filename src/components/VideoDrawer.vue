@@ -10,7 +10,8 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 const props = defineProps({
     isShow: Boolean,
     info: Video,
-    apikey: String
+    apikey: String,
+    isEdit: Boolean
 })
 const apikey = computed(() => props.apikey)
 const drawer2 = computed(() => props.isShow)
@@ -26,7 +27,7 @@ const form = ref({
     src: "",
     img: ""
 })
-const isEdit = ref(false)
+const isEdit = computed(() => props.isEdit)
 
 watch(() => props.apikey, async () => {
     try {
@@ -66,9 +67,6 @@ watch(() => props.info, (newInfo) => {
         } catch (error) {
             console.log(error);
         }
-        isEdit.value = true
-    } else {
-        isEdit.value = false
     }
 })
 const value = ref()

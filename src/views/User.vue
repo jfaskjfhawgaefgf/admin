@@ -8,6 +8,7 @@ import User from "@/class/User";
 import UserDrawer from '@/components/UserDrawer.vue'
 import getCookie from "@/cookie/getcookie";
 
+const isEdit = ref(false)
 const apikey = ref("")
 async function getapikey() {
     let key = getCookie("apikey")
@@ -20,6 +21,7 @@ async function getapikey() {
 }
 console.log(apikey.value);
 const handleEdit = (index: number, row: User) => {
+    isEdit.value = true 
     isShow.value = true
     info.value = row
 }
@@ -55,6 +57,7 @@ const handleDelete = async (index: number, row: User) => {
 
 }
 const addUser = () => {
+    isEdit.value = true
     isShow.value = true
 }
 
@@ -107,7 +110,7 @@ const succes = () => {
             </el-table-column>
         </el-table>
     </div>
-    <UserDrawer :isShow="isShow" :info="info" @succes="succes" @closeAdd="closeAdd" :apikey="apikey"></UserDrawer>
+    <UserDrawer :isShow="isShow" :isEdit="isEdit" :info="info" @succes="succes" @closeAdd="closeAdd" :apikey="apikey"></UserDrawer>
 </template>
 <style lang="less">
 * {
