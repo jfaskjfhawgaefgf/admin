@@ -174,7 +174,7 @@ async function addUser() {
 
 function clear() {
     TableData.value = []
-    value.value = ref()
+    value.value = ref(0)
     works.value = ''
 }
 </script>
