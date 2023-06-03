@@ -24,13 +24,14 @@ const submit = async () => {
 <template>
     <div class="login-box">
         <div class="Card">
-            <h1 style="text-align: center;font-size: 32px;">欢迎登录</h1>
+            <h1 style="text-align: center;font-size: 32px;color: #333;margin: 0;padding: 30px 20px;border-bottom: 1px solid #eee;">欢迎登录</h1>
             <div class="demo-login">
-                <form>
+                <div class="form">
                     <label for="password">密码：</label>
-                    <input v-model="password" type="password" id="password" required>
+                    <input  v-show="false"/>
+                    <input v-model="password" type="password" id="password" @keydown.enter="submit" required>
                     <input type="button" value="登录" @click="submit">
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -61,7 +62,8 @@ body {
 }
 
 
-form {
+
+.form {
     padding: 20px;
 }
 
