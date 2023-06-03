@@ -1,19 +1,23 @@
-# admin
+## 关于项目配置
 
-## Project setup
-```
-npm install
-```
+编辑 `.env` 文件
 
-### Compiles and hot-reloads for development
+```.env
+# 后端api地址
+VUE_APP_API_URL=http://127.0.0.1:10086/api
+
+# 网站域名
+VUE_APP_WEB_URL=demo.filmpie.glxycl.top
 ```
+## 关于项目搭建
+
+```vue
+# 安装依赖
+npm i
+
+# 启动运行环境
 npm run serve
-```
 
-### Compiles and minifies for production
-```
+# 编译
 npm run build
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
