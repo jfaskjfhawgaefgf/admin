@@ -61,15 +61,6 @@ body {
 }
 
 
-h1 {
-    text-align: center;
-    color: #333;
-    margin: 0;
-    padding: 30px 20px;
-    font-size: 24px;
-    border-bottom: 1px solid #eee;
-}
-
 form {
     padding: 20px;
 }

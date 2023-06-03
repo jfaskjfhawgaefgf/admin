@@ -37,17 +37,24 @@ const exitLogin = () => {
         .catch(() => {
         })
 }
+const toHome = ()=>{
+    location.replace("./")
+}
 </script>
 <template>
     <div class="common-layout">
         <el-container>
             <el-header>
                 <el-menu :default-active="activeIndex" :ellipsis="false" class="el-menu-demo" mode="horizontal"
-                    style="position: fixed;width: 96%;" @select="handleSelect">
-                    <el-menu-item index="0">LOGO</el-menu-item>
+                    style="position: fixed;width: 100%;" @select="handleSelect">
+                    <div style="width:80px;" @click="toHome"><img src="../img/logo.8099f6d7.png" style="width: 65px;margin-top:5px ;"></div>
+                    <div style="width: 100%;margin: 0 auto;">
+                        <h1 style="line-height: 60px; font-size: 30px;padding: 0 20px;font-weight: bold;text-align: center;">THE FILM PIE</h1>
+
+                    </div>
                     <div class="flex-grow" />
                     <el-dropdown>
-                        <div class="el-dropdown-link" style="margin-right: 25px;margin-top: 14px;margin-bottom: 13px;">
+                        <div class="el-dropdown-link" style="margin-right: 50px;margin-top: 14px;margin-bottom: 13px;">
                             <el-avatar :size="30" :src="circleUrl" />
                         </div>
                         <template #dropdown>
@@ -56,10 +63,11 @@ const exitLogin = () => {
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
+
                 </el-menu>
             </el-header>
             <!--        侧边布局-->
-            <el-container>
+            <el-container style="margin-top: 1px;">
                 <el-aside class="layout-container-demo" width="64px">
                     <!--            侧边菜单栏-->
 
